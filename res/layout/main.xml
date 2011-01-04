@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <TextView
+                android:id="@+id/application_title"
+                android:layout_width="fill_parent" android:layout_height="wrap_content"
+                android:text="@string/app_title"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+
+        <!-- input form -->
+        <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:stretchColumns="*">
+            <TableRow>
+                <TextView android:text="@string/manufacturer_label"/>
+                <Spinner android:id="@+id/manufacturer_spinner"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/camera_label"/>
+                <Spinner android:id="@+id/camera_spinner" android:prompt="@string/camera_prompt"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/focus_label"/>
+                <EditText android:id="@+id/focus_length_editText" android:inputType="number"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/aperture_label"/>
+                <EditText android:id="@+id/aperture_editText" android:inputType="number"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/subject_distance_label"/>
+                <EditText android:id="@+id/subject_distance_editText" android:inputType="number"/>
+            </TableRow>
+            <TableRow>
+                <Button android:id="@+id/calculate_button"
+                        android:layout_column="1"
+                        android:text="@string/calculate_button_label"/>
+            </TableRow>
+        </TableLayout>
+
+
+        <!-- Result -->
+        <TableLayout
+                android:layout_marginTop="20sp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <TableRow>
+                <TextView android:text="@string/subject_distance_label"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+                <TextView
+                        android:id="@+id/subjet_distance_value"
+                        android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+            <TableRow
+                    android:layout_marginTop="20sp">
+                <TextView android:text="@string/depth_of_field_label"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/near_limit_label"
+                          android:layout_marginLeft="10sp"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+                <TextView android:id="@+id/near_limit_value"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/far_limit_label"
+                          android:layout_marginLeft="10sp"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+                <TextView android:id="@+id/far_limit_value"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+            <TableRow
+                    android:layout_marginBottom="20sp">
+                <TextView android:text="@string/total_label"
+                          android:layout_marginLeft="10sp"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+                <TextView android:id="@+id/total_value"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/hyperfocal_distance_label"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+                <TextView android:id="@+id/hyperfocal_distance_value"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/coc_label"
+                          android:textStyle="bold"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+                <TextView android:id="@+id/coc_value"
+                          android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+
+</ScrollView>
+
