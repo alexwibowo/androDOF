@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +33,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         findViewById(R.id.calculate_button).setOnClickListener(this);
         initializeCameraSpinner();
         initializeManufacturerSpinner();
+        loadDefaultManufacturer();
         Log.d(TAG, "Finished creating AndoDOF activity");
     }
 
@@ -45,6 +48,11 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.help_button:{
+                Log.d(TAG, "Help button");
+                startActivity(new Intent(this, Help.class));
+                return true;
+            }
             case R.id.about_button: {
                 Log.d(TAG, "About button");
                 startActivity(new Intent(this, About.class));
@@ -57,6 +65,26 @@ public class AndroDOF extends Activity implements View.OnClickListener {
             }
         }
         return false;
+    }
+
+    private SharedPreferences getPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    private void loadDefaultManufacturer() {
+        SharedPreferences preferences = getPreferences();
+        String defaultManufacturer = preferences.getString(getString(R.string.manufacturer_setting_key), "");
+        if (defaultManufacturer != null && defaultManufacturer.trim().length() > 0) {
+            setSelectedManufacturer(CameraData.Manufacturer.valueOf(defaultManufacturer));
+        }
+    }
+
+    private void loadDefaultCamera() {
+        SharedPreferences preferences = getPreferences();
+        String defaultCamera = preferences.getString(getString(R.string.camera_setting_key), "");
+        if (defaultCamera != null && defaultCamera.trim().length() > 0) {
+            setSelectedCamera(defaultCamera);
+        }
     }
 
     public void onClick(View view) {
@@ -88,11 +116,9 @@ public class AndroDOF extends Activity implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 CameraData.Manufacturer manufacturer = (CameraData.Manufacturer) adapterView.getAdapter().getItem(i);
                 populateCameraByManufacturer(manufacturer);
+                loadDefaultCamera();
             }
-
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) { }
         });
     }
 
@@ -185,6 +211,18 @@ public class AndroDOF extends Activity implements View.OnClickListener {
 
     private String getSelectedCamera() {
         return (String) getCameraSpinner().getSelectedItem();
+    }
+
+    private void setSelectedCamera(String camera) {
+        ArrayAdapter adapter = (ArrayAdapter) getCameraSpinner().getAdapter();
+        int position = adapter.getPosition(camera);
+        getCameraSpinner().setSelection(position);
+    }
+
+    private void setSelectedManufacturer(CameraData.Manufacturer manufacturer) {
+        ArrayAdapter adapter = (ArrayAdapter) getManufacturerSpinner().getAdapter();
+        int position = adapter.getPosition(manufacturer);
+        getManufacturerSpinner().setSelection(position);
     }
 
     private Spinner getCameraSpinner() {

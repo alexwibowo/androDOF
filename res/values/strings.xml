@@ -28,6 +28,8 @@
 
     <string name="calculate_button_label">Calculate</string>
 
+    <string name="help_label">Help</string>
+
     <string name="setting_label">Setting</string>
     <string name="manufacturer_setting_key">manufacturer</string>
     <string name="camera_setting_key">camera</string>
