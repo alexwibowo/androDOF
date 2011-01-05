@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.preference.ListPreference
+            android:key="@string/manufacturer_setting_key"
+            android:title="@string/manufacturer_label"
+            android:summary="@string/manufacturer_summary"/>
+
+    <android.preference.ListPreference
+            android:key="@string/camera_setting_key"
+            android:title="@string/camera_label"
+            android:summary="@string/camera_summary"/>
+</PreferenceScreen>

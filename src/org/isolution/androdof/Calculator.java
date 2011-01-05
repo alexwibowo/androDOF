@@ -32,6 +32,9 @@ public class Calculator {
         result.setFarDistance(calculateFarDistance(result.getHyperFocalDistance()));
         result.setTotal(result.getFarDistance().subtract(result.getNearDistance()));
         result.setSubjectDistance(subjectDistance);
+        result.setInFrontOfSubject(result.getSubjectDistance().subtract(result.getNearDistance()));
+        result.setBehindSubject(result.getFarDistance().subtract(result.getSubjectDistance()));
+        result.setInFrontOfSubjectForHyperfocal(calculateNearDistanceForHyperfocal(result.getHyperFocalDistance()));
         result.setCoc(coc);
         return result;
     }
@@ -46,6 +49,13 @@ public class Calculator {
         BigDecimal top = subjectDistance.multiply(hyperFocalDistance.subtract(focusLength));
         BigDecimal twiceFocusLength = new BigDecimal(2).multiply(focusLength);
         BigDecimal bottom = hyperFocalDistance.add(subjectDistance).subtract(twiceFocusLength);
+        return top.divide(bottom, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal calculateNearDistanceForHyperfocal(BigDecimal hyperFocalDistance) {
+        BigDecimal top = hyperFocalDistance.multiply(hyperFocalDistance.subtract(focusLength));
+        BigDecimal twiceFocusLength = new BigDecimal(2).multiply(focusLength);
+        BigDecimal bottom = hyperFocalDistance.add(hyperFocalDistance).subtract(twiceFocusLength);
         return top.divide(bottom, RoundingMode.HALF_EVEN);
     }
 
@@ -101,6 +111,9 @@ public class Calculator {
         private BigDecimal farDistance;
         private BigDecimal total;
         private BigDecimal coc;
+        private BigDecimal inFrontOfSubjectForHyperfocal;
+        private BigDecimal inFrontOfSubject;
+        private BigDecimal behindSubject;
 
         public BigDecimal getHyperFocalDistance() {
             return hyperFocalDistance;
@@ -148,6 +161,30 @@ public class Calculator {
 
         public void setCoc(BigDecimal coc) {
             this.coc = coc;
+        }
+
+        public BigDecimal getInFrontOfSubject() {
+            return inFrontOfSubject;
+        }
+
+        public void setInFrontOfSubject(BigDecimal inFrontOfSubject) {
+            this.inFrontOfSubject = inFrontOfSubject;
+        }
+
+        public BigDecimal getBehindSubject() {
+            return behindSubject;
+        }
+
+        public void setBehindSubject(BigDecimal behindSubject) {
+            this.behindSubject = behindSubject;
+        }
+
+        public BigDecimal getInFrontOfSubjectForHyperfocal() {
+            return inFrontOfSubjectForHyperfocal;
+        }
+
+        public void setInFrontOfSubjectForHyperfocal(BigDecimal inFrontOfSubjectForHyperfocal) {
+            this.inFrontOfSubjectForHyperfocal = inFrontOfSubjectForHyperfocal;
         }
     }
 }

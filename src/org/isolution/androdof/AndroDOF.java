@@ -47,8 +47,12 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         switch (item.getItemId()) {
             case R.id.about_button: {
                 Log.d(TAG, "About button");
-                Intent aboutIntent = new Intent(this, About.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(this, About.class));
+                return true;
+            }
+            case R.id.setting_button: {
+                Log.d(TAG, "Setting button");
+                startActivity(new Intent(this, Prefs.class));
                 return true;
             }
         }
@@ -139,7 +143,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     }
 
     private void focusViewInError(String errorItem) {
-        if (errorItem.indexOf(InputValidator.APERTURE_ERROR_MESSAGE) != -1) {
+        if (errorItem.indexOf(InputValidator.FSTOP_ERROR_MESSAGE) != -1) {
             findViewById(R.id.aperture_editText).requestFocus();
         }else if (errorItem.indexOf(InputValidator.FOCUS_LENGTH_ERROR_MESSAGE) != -1) {
             findViewById(R.id.focus_length_editText).requestFocus();
@@ -156,6 +160,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         CameraData.Manufacturer manufacturer = getSelectedManufacturer();
 
         Log.d(TAG,"Selected camera is " + camera);
+        Log.d(TAG,"Selected manufacturer is " + manufacturer);
 
 
         Calculator calculator = new Calculator()
@@ -208,6 +213,15 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         TextView hyperFocalView = (TextView) findViewById(R.id.hyperfocal_distance_value);
         hyperFocalView.setText(displayMeterValue(result.getHyperFocalDistance()));
 
+        TextView inFrontSubjectView  = (TextView) findViewById(R.id.infront_subject_value);
+        inFrontSubjectView.setText(displayMeterValue(result.getInFrontOfSubject()));
+
+        TextView inFrontSubjectHyperfocalView  = (TextView) findViewById(R.id.infront_subject_hyperfocal_value);
+        inFrontSubjectHyperfocalView.setText(displayMeterValue(result.getInFrontOfSubjectForHyperfocal()));
+
+        TextView behindSubjectView  = (TextView) findViewById(R.id.behind_subject_value);
+        behindSubjectView.setText(displayMeterValue(result.getBehindSubject()));
+
         TextView totalView = (TextView) findViewById(R.id.total_value);
         totalView.setText(displayMeterValue(result.getTotal()));
 
@@ -220,7 +234,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     }
 
     private String displayMeterValue(BigDecimal millimetersValue) {
-        return asMeters(millimetersValue) + " m";
+        return millimetersValue.intValue() < 0? "infinite" : asMeters(millimetersValue) + " m";
     }
 
     private String displayMillimetersValue(BigDecimal millimetersValue) {

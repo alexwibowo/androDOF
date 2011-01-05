@@ -12,5 +12,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".About" android:label="About" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".Prefs" android:label="@string/setting_label"/>
     </application>
 </manifest> 

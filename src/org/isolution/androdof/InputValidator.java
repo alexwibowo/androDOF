@@ -12,7 +12,7 @@ import java.util.List;
  * Time: 12:59 AM
  */
 public class InputValidator {
-    public static final String APERTURE_ERROR_MESSAGE = "aperture";
+    public static final String FSTOP_ERROR_MESSAGE = "f-stop";
     public static final String FOCUS_LENGTH_ERROR_MESSAGE = "focus length";
     public static final String SUBJECT_DISTANCE_ERROR_MESSAGE = "subject distance";
 
@@ -67,13 +67,13 @@ public class InputValidator {
 
     private boolean validateApertureValue() {
         if (apertureValue.toString() == null || apertureValue.toString().trim().length() == 0) {
-            errors.add("Must supply aperture");
+            errors.add("Must supply f-stop");
             return false;
         }
         try {
             new BigDecimal(apertureValue.toString());
         } catch (NumberFormatException e) {
-            errors.add("Must supply numeric aperture value");
+            errors.add("Must supply numeric f-stop value");
             return false;
         }
         return true;

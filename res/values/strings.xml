@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Android DOF Calculator</string>
+    <string name="app_name">Andro DOF</string>
     <string name="app_title">Andro DOF</string>
+
+    <!-- form labels -->
     <string name="manufacturer_label">Manufacturer</string>
+    <string name="manufacturer_summary">Default value to use for camera manufacturer</string>
+
     <string name="camera_label">Camera</string>
+    <string name="camera_summary">Default value to use for camera</string>
+
     <string name="camera_prompt">Choose a camera</string>
     <string name="focus_label">Focus Length (mm)</string>
-    <string name="aperture_label">F-stop</string>
-    <string name="about_text">Depth of Field Calculator</string>
+    <string name="fstop_label">F-stop</string>
     <string name="subject_distance_label">Subject Distance (m)</string>
 
     <string name="depth_of_field_label">Depth of field</string>
     <string name="near_limit_label">Near limit</string>
     <string name="far_limit_label">Far limit</string>
     <string name="total_label">Total</string>
+    <string name="infront_subject_label">In front of subject</string>
+    <string name="infront_subject_hyperfocal_label">In front of subject (hyperfocal)</string>
+    <string name="behind_subject_label">Behind subject</string>
     <string name="hyperfocal_distance_label">Hyperfocal distance</string>
     <string name="coc_label">Circle of confusion</string>
 
 
     <string name="calculate_button_label">Calculate</string>
+
+    <string name="setting_label">Setting</string>
+    <string name="manufacturer_setting_key">manufacturer</string>
+    <string name="camera_setting_key">camera</string>
+
     <string name="about_button_label">About</string>
+    <string name="about_text">\
+Andro DOF is an application for calculating depth of field.
+    </string>
     <string name="about_shortcut">A</string>
 </resources>
