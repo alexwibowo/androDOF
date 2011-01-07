@@ -11,8 +11,10 @@
     <string name="camera_summary">Default value to use for camera</string>
 
     <string name="camera_prompt">Choose a camera</string>
+    <string name="manufacturer_prompt">Choose a manufacturer</string>
     <string name="focus_label">Focus Length (mm)</string>
     <string name="fstop_label">F-stop</string>
+    <string name="fstop_prompt">Choose an F-stop</string>
     <string name="subject_distance_label">Subject Distance (m)</string>
 
     <string name="depth_of_field_label">Depth of field</string>
@@ -36,7 +38,8 @@
 
     <string name="about_button_label">About</string>
     <string name="about_text">\
-Andro DOF is an application for calculating depth of field.
+An application for calculating depth of field (DOF) and hyperfocal distance for camera.
+This is a very early release of the application. Send any feedback, feature requests to : alexwibowo@gmail.com
     </string>
     <string name="about_shortcut">A</string>
 </resources>

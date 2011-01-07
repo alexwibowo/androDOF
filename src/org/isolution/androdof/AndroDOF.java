@@ -32,6 +32,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         setContentView(R.layout.main);
         findViewById(R.id.calculate_button).setOnClickListener(this);
         initializeCameraSpinner();
+        initializeFstopSpinner();
         initializeManufacturerSpinner();
         loadDefaultManufacturer();
         Log.d(TAG, "Finished creating AndoDOF activity");
@@ -144,13 +145,22 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         spinner.setAdapter(cameraArrayAdapter);
     }
 
+    private void initializeFstopSpinner() {
+        Spinner spinner = getFStopSpinner();
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        for (FStop fstop : FStop.getAllFStops()) {
+            adapter.add(fstop);
+        }
+    }
+
     private boolean validateInput() {
         Log.d(TAG, "Validating input");
         Editable subjectDistanceValue = getSubjectDistanceValue();
         Editable focusLengthValue = getFocusLengthValue();
-        Editable apertureValue = getApertureValue();
 
-        InputValidator inputValidator = new InputValidator(subjectDistanceValue, focusLengthValue, apertureValue);
+        InputValidator inputValidator = new InputValidator(subjectDistanceValue.toString(), focusLengthValue.toString());
         final List<String> errors = inputValidator.getErrors();
 
         if (!inputValidator.isValid()) {
@@ -169,9 +179,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     }
 
     private void focusViewInError(String errorItem) {
-        if (errorItem.indexOf(InputValidator.FSTOP_ERROR_MESSAGE) != -1) {
-            findViewById(R.id.aperture_editText).requestFocus();
-        }else if (errorItem.indexOf(InputValidator.FOCUS_LENGTH_ERROR_MESSAGE) != -1) {
+         if (errorItem.indexOf(InputValidator.FOCUS_LENGTH_ERROR_MESSAGE) != -1) {
             findViewById(R.id.focus_length_editText).requestFocus();
         }else if (errorItem.indexOf(InputValidator.SUBJECT_DISTANCE_ERROR_MESSAGE) != -1) {
             findViewById(R.id.subject_distance_editText).requestFocus();
@@ -179,19 +187,19 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     }
 
     private Calculator.Result calculate() {
-        BigDecimal aperture = new BigDecimal(getApertureValue().toString());
         BigDecimal focusLength = new BigDecimal(getFocusLengthValue().toString());
         BigDecimal subjectDistance = new BigDecimal(getSubjectDistanceValue().toString());
+        BigDecimal fstop = getSelectedFStop();
         String camera = getSelectedCamera();
         CameraData.Manufacturer manufacturer = getSelectedManufacturer();
 
-        Log.d(TAG,"Selected camera is " + camera);
-        Log.d(TAG,"Selected manufacturer is " + manufacturer);
+        Log.d(TAG, "Selected camera is " + camera);
+        Log.d(TAG, "Selected manufacturer is " + manufacturer);
 
 
         Calculator calculator = new Calculator()
                 .withSubjectDistance(subjectDistance.multiply(new BigDecimal(1000)))
-                .withAperture(aperture)
+                .withAperture(fstop)
                 .withFocusLength(focusLength)
                 .withCoc(CameraData.getCocForCamera(manufacturer, camera));
         return calculator.calculate();
@@ -203,10 +211,6 @@ public class AndroDOF extends Activity implements View.OnClickListener {
 
     private Editable getFocusLengthValue() {
         return ((EditText) findViewById(R.id.focus_length_editText)).getText();
-    }
-
-    private Editable getApertureValue() {
-        return ((EditText) findViewById(R.id.aperture_editText)).getText();
     }
 
     private String getSelectedCamera() {
@@ -229,6 +233,14 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         return (Spinner) findViewById(R.id.camera_spinner);
     }
 
+    private Spinner getFStopSpinner() {
+        return (Spinner) findViewById(R.id.fstop_spinner);
+    }
+
+    private BigDecimal getSelectedFStop() {
+        return ((FStop) getFStopSpinner().getSelectedItem()).getValue();
+    }
+
     private CameraData.Manufacturer getSelectedManufacturer() {
         return (CameraData.Manufacturer) getManufacturerSpinner().getSelectedItem();
     }
@@ -239,9 +251,6 @@ public class AndroDOF extends Activity implements View.OnClickListener {
 
 
     private void displayValues(Calculator.Result result) {
-        TextView subjectDistanceView = (TextView) findViewById(R.id.subjet_distance_value);
-        subjectDistanceView.setText(displayMeterValue(result.getSubjectDistance()));
-
         TextView nearLimitView = (TextView) findViewById(R.id.near_limit_value);
         nearLimitView.setText(displayMeterValue(result.getNearDistance()));
 

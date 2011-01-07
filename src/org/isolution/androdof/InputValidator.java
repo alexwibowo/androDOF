@@ -1,7 +1,5 @@
 package org.isolution.androdof;
 
-import android.text.Editable;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,37 +10,37 @@ import java.util.List;
  * Time: 12:59 AM
  */
 public class InputValidator {
-    public static final String FSTOP_ERROR_MESSAGE = "f-stop";
     public static final String FOCUS_LENGTH_ERROR_MESSAGE = "focus length";
+
     public static final String SUBJECT_DISTANCE_ERROR_MESSAGE = "subject distance";
 
-    private Editable subjectDistanceValue;
-    private Editable focusLengthValue;
-    private Editable apertureValue;
+    private String subjectDistanceValue;
+
+    private String focusLengthValue;
+
     private List<String> errors = new ArrayList<String>();
+
     private boolean valid;
 
-    public InputValidator(Editable subjectDistanceValue, Editable focusLengthValue, Editable apertureValue) {
+    public InputValidator(String subjectDistanceValue, String focusLengthValue) {
         this.subjectDistanceValue = subjectDistanceValue;
         this.focusLengthValue = focusLengthValue;
-        this.apertureValue = apertureValue;
         this.valid = validate();
     }
 
     private boolean validate() {
-        boolean validAperture = validateApertureValue();
         boolean validFocusLength = validateFocusLength();
         boolean validSubjectDistance = validateSubjectDistance();
-        return validAperture && validFocusLength && validSubjectDistance;
+        return validFocusLength && validSubjectDistance;
     }
 
     private boolean validateSubjectDistance() {
-        if (subjectDistanceValue.toString() == null || subjectDistanceValue.toString().trim().length() == 0) {
+        if (subjectDistanceValue== null || subjectDistanceValue.trim().length() == 0) {
             errors.add("Must supply subject distance");
             return false;
         }
         try {
-            new BigDecimal(subjectDistanceValue.toString());
+            new BigDecimal(subjectDistanceValue);
         } catch (NumberFormatException e) {
             errors.add("Must supply numeric subject distance value");
             return false;
@@ -52,28 +50,14 @@ public class InputValidator {
 
 
     private boolean validateFocusLength() {
-        if (focusLengthValue.toString() == null || focusLengthValue.toString().trim().length() == 0) {
+        if (focusLengthValue == null || focusLengthValue.trim().length() == 0) {
             errors.add("Must supply focus length");
             return false;
         }
         try {
-            new BigDecimal(focusLengthValue.toString());
+            new BigDecimal(focusLengthValue);
         } catch (NumberFormatException e) {
             errors.add("Must supply numeric focus length value");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateApertureValue() {
-        if (apertureValue.toString() == null || apertureValue.toString().trim().length() == 0) {
-            errors.add("Must supply f-stop");
-            return false;
-        }
-        try {
-            new BigDecimal(apertureValue.toString());
-        } catch (NumberFormatException e) {
-            errors.add("Must supply numeric f-stop value");
             return false;
         }
         return true;
