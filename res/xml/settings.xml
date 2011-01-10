@@ -3,11 +3,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <android.preference.ListPreference
             android:key="@string/manufacturer_setting_key"
-            android:title="@string/manufacturer_label"
-            android:summary="@string/manufacturer_summary"/>
+            android:title="@string/default_manufacturer_label"/>
 
     <android.preference.ListPreference
             android:key="@string/camera_setting_key"
-            android:title="@string/camera_label"
-            android:summary="@string/camera_summary"/>
+            android:title="@string/default_camera_label"
+            android:enabled="false"/>
+
+    <android.preference.ListPreference
+            android:key="@string/unit_setting_key"
+            android:title="@string/default_unit_label"/>
 </PreferenceScreen>

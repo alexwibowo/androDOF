@@ -5,17 +5,20 @@
 
     <!-- form labels -->
     <string name="manufacturer_label">Manufacturer</string>
-    <string name="manufacturer_summary">Default value to use for camera manufacturer</string>
+    <string name="default_manufacturer_label">Default manufacturer</string>
 
     <string name="camera_label">Camera</string>
-    <string name="camera_summary">Default value to use for camera</string>
+    <string name="default_camera_label">Default camera</string>
+
+    <string name="default_unit_label">Default unit</string>
 
     <string name="camera_prompt">Choose a camera</string>
     <string name="manufacturer_prompt">Choose a manufacturer</string>
     <string name="focus_label">Focus Length (mm)</string>
     <string name="fstop_label">F-stop</string>
     <string name="fstop_prompt">Choose an F-stop</string>
-    <string name="subject_distance_label">Subject Distance (m)</string>
+    <string name="subject_distance_label">Subject Distance</string>
+    <string name="unit_prompt">Choose unit</string>
 
     <string name="depth_of_field_label">Depth of field</string>
     <string name="near_limit_label">Near limit</string>
@@ -35,6 +38,7 @@
     <string name="setting_label">Setting</string>
     <string name="manufacturer_setting_key">manufacturer</string>
     <string name="camera_setting_key">camera</string>
+    <string name="unit_setting_key">unit</string>
 
     <string name="about_button_label">About</string>
     <string name="about_text">\

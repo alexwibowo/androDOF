@@ -14,24 +14,24 @@
                 android:stretchColumns="*">
             <TableRow>
                 <TextView android:text="@string/manufacturer_label"/>
-                <Spinner android:id="@+id/manufacturer_spinner" android:prompt="@string/manufacturer_prompt"/>
+                <Spinner android:id="@+id/manufacturer_spinner" android:prompt="@string/manufacturer_prompt" android:layout_span="2"/>
             </TableRow>
             <TableRow>
                 <TextView android:text="@string/camera_label"/>
-                <Spinner android:id="@+id/camera_spinner" android:layout_width="fill_parent" android:prompt="@string/camera_prompt"/>
+                <Spinner android:id="@+id/camera_spinner" android:layout_width="fill_parent" android:prompt="@string/camera_prompt" android:layout_span="2"/>
             </TableRow>
             <TableRow>
                 <TextView android:text="@string/focus_label"/>
-                <EditText android:id="@+id/focus_length_editText" android:inputType="number"/>
+                <EditText android:id="@+id/focus_length_editText" android:inputType="number" android:layout_span="2"/>
             </TableRow>
             <TableRow>
                 <TextView android:text="@string/fstop_label"/>
-                <Spinner android:id="@+id/fstop_spinner" android:prompt="@string/fstop_prompt"/>
-                <!--<EditText android:id="@+id/aperture_editText" android:inputType="numberDecimal"/>-->
+                <Spinner android:id="@+id/fstop_spinner" android:prompt="@string/fstop_prompt" android:layout_span="2"/>
             </TableRow>
             <TableRow>
                 <TextView android:text="@string/subject_distance_label"/>
                 <EditText android:id="@+id/subject_distance_editText" android:inputType="numberDecimal"/>
+                <Spinner android:id="@+id/unit_spinner" android:prompt="@string/unit_prompt"/>
             </TableRow>
             <TableRow>
                 <Button android:id="@+id/calculate_button"

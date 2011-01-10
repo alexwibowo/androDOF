@@ -21,6 +21,9 @@ public class Calculator {
     /** Circle of confusion for the camera, in millimeters */
     private BigDecimal coc;
 
+    /** Unit for measurement */
+    private MeasurementUnit unit= MeasurementUnit.DEFAULT_MEASUREMENT_UNIT;
+
     /** Calculation result */
     public Calculator() {
     }
@@ -99,6 +102,14 @@ public class Calculator {
     public Calculator withCoc(BigDecimal coc) {
         this.coc = coc;
         return this;
+    }
+
+    public MeasurementUnit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(MeasurementUnit unit) {
+        this.unit = unit;
     }
 
     /**

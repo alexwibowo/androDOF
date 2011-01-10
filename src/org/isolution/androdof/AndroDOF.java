@@ -16,11 +16,15 @@ import android.view.View;
 import android.widget.*;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 public class AndroDOF extends Activity implements View.OnClickListener {
     public static final String TAG = AndroDOF.class.getName();
+    private static final String STATE_SELECTED_CAMERA = "selectedCamera";
+    private static final String STATE_SELECTED_MANUFACTURER = "selectedManufacturer";
+    private static final String STATE_SELECTED_UNIT = "selectedUnit";
+
+    private Bundle bundle;
 
     /**
      * Called when the activity is first created.
@@ -29,13 +33,52 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "Creating AndoDOF activity");
         super.onCreate(savedInstanceState);
+        this.bundle = savedInstanceState;
         setContentView(R.layout.main);
         findViewById(R.id.calculate_button).setOnClickListener(this);
         initializeCameraSpinner();
         initializeFstopSpinner();
+        initUnitSpinner();
         initializeManufacturerSpinner();
+
         loadDefaultManufacturer();
+        loadDefaultUnit();
         Log.d(TAG, "Finished creating AndoDOF activity");
+    }
+
+    private void restoreSelectedCameraFromBundle() {
+        if (bundle != null) {
+            String selectedCamera = bundle.getString(STATE_SELECTED_CAMERA);
+            if (selectedCamera != null && selectedCamera.trim().length() > 0) {
+                setSelectedCamera(selectedCamera);
+            }
+        }
+    }
+
+    private void restoreSelectedManufacturerFromBundle() {
+        if (bundle != null) {
+            String selectedManufacturer = bundle.getString(STATE_SELECTED_MANUFACTURER);
+            if (selectedManufacturer != null && selectedManufacturer.trim().length() > 0) {
+                setSelectedManufacturer(CameraData.Manufacturer.valueOf(selectedManufacturer));
+            }
+        }
+    }
+
+    private void restoreSelectedUnitFromBundle() {
+        if (bundle != null) {
+            String selectedUnit = bundle.getString(STATE_SELECTED_UNIT);
+            if (selectedUnit != null && selectedUnit.trim().length() > 0) {
+                setSelectedUnit(selectedUnit);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);    //To change body of overridden methods use File | Settings | File Templates.
+        outState.putString(STATE_SELECTED_MANUFACTURER, getSelectedManufacturer().toString());
+        outState.putString(STATE_SELECTED_CAMERA, getSelectedCamera());
+        outState.putString(STATE_SELECTED_UNIT, getSelectedUnit().getAbbrev());
     }
 
     @Override
@@ -72,12 +115,22 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
+    private void loadDefaultUnit() {
+        SharedPreferences preferences = getPreferences();
+        String defaultUnitAbbrev  = preferences.getString(getString(R.string.unit_setting_key), "");
+        if (defaultUnitAbbrev != null && defaultUnitAbbrev.trim().length() > 0) {
+            setSelectedUnit(defaultUnitAbbrev);
+        }
+        restoreSelectedUnitFromBundle();
+    }
+
     private void loadDefaultManufacturer() {
         SharedPreferences preferences = getPreferences();
         String defaultManufacturer = preferences.getString(getString(R.string.manufacturer_setting_key), "");
         if (defaultManufacturer != null && defaultManufacturer.trim().length() > 0) {
             setSelectedManufacturer(CameraData.Manufacturer.valueOf(defaultManufacturer));
         }
+        restoreSelectedManufacturerFromBundle();
     }
 
     private void loadDefaultCamera() {
@@ -86,7 +139,11 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         if (defaultCamera != null && defaultCamera.trim().length() > 0) {
             setSelectedCamera(defaultCamera);
         }
+        // Override if we have bundled values
+        restoreSelectedCameraFromBundle();
     }
+
+
 
     public void onClick(View view) {
         int eventGenerator = view.getId();
@@ -95,8 +152,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
             case R.id.calculate_button: {
                 Log.d(TAG, "Calculate button is pressed");
                 if (validateInput()){
-                    Calculator.Result result = calculate();
-                    displayValues(result);
+                    displayResult(calculate());
                 }
                 break;
             }
@@ -155,6 +211,16 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         }
     }
 
+    private void initUnitSpinner() {
+        Spinner unitSpinner = getUnitSpinner();
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitSpinner.setAdapter(arrayAdapter);
+        for (MeasurementUnit measurementUnit : MeasurementUnit.getUnitsForSubjectDistance()) {
+            arrayAdapter.add(measurementUnit);
+        }
+    }
+
     private boolean validateInput() {
         Log.d(TAG, "Validating input");
         Editable subjectDistanceValue = getSubjectDistanceValue();
@@ -193,12 +259,8 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         String camera = getSelectedCamera();
         CameraData.Manufacturer manufacturer = getSelectedManufacturer();
 
-        Log.d(TAG, "Selected camera is " + camera);
-        Log.d(TAG, "Selected manufacturer is " + manufacturer);
-
-
         Calculator calculator = new Calculator()
-                .withSubjectDistance(subjectDistance.multiply(new BigDecimal(1000)))
+                .withSubjectDistance(shouldDisplayAsMeter()?UnitConverter.fromMeterToMillimeters(subjectDistance ) : UnitConverter.fromFeetToMillimeters(subjectDistance))
                 .withAperture(fstop)
                 .withFocusLength(focusLength)
                 .withCoc(CameraData.getCocForCamera(manufacturer, camera));
@@ -229,9 +291,25 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         getManufacturerSpinner().setSelection(position);
     }
 
+
     private Spinner getCameraSpinner() {
         return (Spinner) findViewById(R.id.camera_spinner);
     }
+
+    private Spinner getUnitSpinner() {
+        return (Spinner) findViewById(R.id.unit_spinner);
+    }
+
+    private MeasurementUnit getSelectedUnit() {
+        return (MeasurementUnit) getUnitSpinner().getSelectedItem();
+    }
+
+    private void setSelectedUnit(String selectedUnit) {
+        ArrayAdapter adapter = (ArrayAdapter) getUnitSpinner().getAdapter();
+        int position = adapter.getPosition(MeasurementUnit.fromAbbrev(selectedUnit));
+        getUnitSpinner().setSelection(position);
+    }
+
 
     private Spinner getFStopSpinner() {
         return (Spinner) findViewById(R.id.fstop_spinner);
@@ -249,42 +327,44 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         return (Spinner) findViewById(R.id.manufacturer_spinner);
     }
 
+    private boolean shouldDisplayAsMeter() {
+        return MeasurementUnit.METER.equals(getSelectedUnit());
+    }
 
-    private void displayValues(Calculator.Result result) {
+
+    private void displayResult(Calculator.Result result) {
         TextView nearLimitView = (TextView) findViewById(R.id.near_limit_value);
-        nearLimitView.setText(displayMeterValue(result.getNearDistance()));
+        nearLimitView.setText(displayDistanceValue(result.getNearDistance()));
 
         TextView farLimitView = (TextView) findViewById(R.id.far_limit_value);
-        farLimitView.setText(displayMeterValue(result.getFarDistance()));
+        farLimitView.setText(displayDistanceValue(result.getFarDistance()));
 
         TextView hyperFocalView = (TextView) findViewById(R.id.hyperfocal_distance_value);
-        hyperFocalView.setText(displayMeterValue(result.getHyperFocalDistance()));
+        hyperFocalView.setText(displayDistanceValue(result.getHyperFocalDistance()));
 
         TextView inFrontSubjectView  = (TextView) findViewById(R.id.infront_subject_value);
-        inFrontSubjectView.setText(displayMeterValue(result.getInFrontOfSubject()));
+        inFrontSubjectView.setText(displayDistanceValue(result.getInFrontOfSubject()));
 
         TextView inFrontSubjectHyperfocalView  = (TextView) findViewById(R.id.infront_subject_hyperfocal_value);
-        inFrontSubjectHyperfocalView.setText(displayMeterValue(result.getInFrontOfSubjectForHyperfocal()));
+        inFrontSubjectHyperfocalView.setText(displayDistanceValue(result.getInFrontOfSubjectForHyperfocal()));
 
         TextView behindSubjectView  = (TextView) findViewById(R.id.behind_subject_value);
-        behindSubjectView.setText(displayMeterValue(result.getBehindSubject()));
+        behindSubjectView.setText(displayDistanceValue(result.getBehindSubject()));
 
         TextView totalView = (TextView) findViewById(R.id.total_value);
-        totalView.setText(displayMeterValue(result.getTotal()));
+        totalView.setText(displayDistanceValue(result.getTotal()));
 
         TextView cocView = (TextView) findViewById(R.id.coc_value);
         cocView.setText(displayMillimetersValue(result.getCoc()));
     }
 
-    private BigDecimal asMeters(BigDecimal millimetersValue) {
-        return millimetersValue.divide(new BigDecimal(1000), 3,RoundingMode.HALF_EVEN);
-    }
-
-    private String displayMeterValue(BigDecimal millimetersValue) {
-        return millimetersValue.intValue() < 0? "infinite" : asMeters(millimetersValue) + " m";
+    private String displayDistanceValue(BigDecimal millimetersValue) {
+        return millimetersValue.intValue() < 0? "infinite" :
+                (shouldDisplayAsMeter()?UnitConverter.fromMillimetersToMeters(millimetersValue):UnitConverter.fromMillimetersToFeet(millimetersValue)) + " " +
+                 (shouldDisplayAsMeter()?MeasurementUnit.METER.getAbbrev():MeasurementUnit.FEET) ;
     }
 
     private String displayMillimetersValue(BigDecimal millimetersValue) {
-        return millimetersValue + " mm";
+        return millimetersValue + " " + MeasurementUnit.MILLIMETER.getAbbrev();
     }
 }
