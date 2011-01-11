@@ -96,12 +96,14 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d(TAG, "Saving state to bundle");
         outState.putSerializable(STATE_SELECTED_MANUFACTURER, getSelectedManufacturer());
         outState.putString(STATE_SELECTED_CAMERA, getSelectedCamera());
         outState.putSerializable(STATE_SELECTED_UNIT, getSelectedUnit());
         if (calculationResult != null) {
             outState.putSerializable(STATE_RESULT, calculationResult);
         }
+        Log.d(TAG, "Finished saving state to bundle");
     }
 
     @Override
@@ -140,8 +142,9 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     }
 
     private void loadDefaultUnit() {
-        String defaultUnitAbbrev  = getPreferenceValue(R.string.unit_setting_key, "");
+        String defaultUnitAbbrev = getPreferenceValue(R.string.unit_setting_key, "");
         if (!StringUtils.isBlank(defaultUnitAbbrev)) {
+            Log.d(TAG, "Loading default unit " + defaultUnitAbbrev);
             setSelectedUnit(defaultUnitAbbrev);
         }
         // Override if we have stored state value
@@ -151,6 +154,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     private void loadDefaultManufacturer() {
         String defaultManufacturer = getPreferenceValue(R.string.manufacturer_setting_key, "");
         if (!StringUtils.isBlank(defaultManufacturer)) {
+            Log.d(TAG, "Loading default manufacturer " + defaultManufacturer);
             setSelectedManufacturer(CameraData.Manufacturer.valueOf(defaultManufacturer));
         }
         // Override if we have stored state value
@@ -160,6 +164,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     private void loadDefaultCamera() {
         String defaultCamera = getPreferenceValue(R.string.camera_setting_key, "");
         if (!StringUtils.isBlank(defaultCamera)) {
+            Log.d(TAG, "Loading default camera " + defaultCamera);
             setSelectedCamera(defaultCamera);
         }
         // Override if we have stored state value
@@ -171,8 +176,9 @@ public class AndroDOF extends Activity implements View.OnClickListener {
 
         switch (eventGenerator) {
             case R.id.calculate_button: {
-                Log.d(TAG, "Calculate button is pressed");
-                if (validateInput()){
+                Log.i(TAG, "Calculate button is pressed");
+                if (validateInput()) {
+                    Log.i(TAG, "Calculating..");
                     calculationResult = calculate();
                     displayResult(calculationResult);
                 }
@@ -193,6 +199,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         }
         manufacturerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "Manufacturer selected");
                 CameraData.Manufacturer manufacturer = (CameraData.Manufacturer) adapterView.getAdapter().getItem(i);
                 populateCameraByManufacturer(manufacturer);
                 loadDefaultCamera();
@@ -203,6 +210,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
 
     @SuppressWarnings({"unchecked"})
     private void populateCameraByManufacturer(CameraData.Manufacturer manufacturer) {
+        Log.i(TAG, "Populating camera list for selected manufacturer " + manufacturer);
         List<CameraData> cameraByManufacturer = CameraData.getCameraByManufacturer(manufacturer);
 
         // Clear the current camera values
@@ -213,6 +221,7 @@ public class AndroDOF extends Activity implements View.OnClickListener {
         for (CameraData cameraData : cameraByManufacturer) {
             cameraSpinnerAdapter.add(cameraData.getLabel());
         }
+        Log.i(TAG, "Finished populating camera list for  selected manufacturer");
     }
 
     private void initializeCameraSpinner() {
@@ -363,28 +372,40 @@ public class AndroDOF extends Activity implements View.OnClickListener {
     }
 
     private void displayResult(Calculator.Result result) {
+        Log.i(TAG, "Displaying calculated result");
+
+        Log.d(TAG, "Displaying near limit value");
         TextView nearLimitView = (TextView) findViewById(R.id.near_limit_value);
         nearLimitView.setText(format(result.getNearDistance(), getSelectedUnit()));
 
+        Log.d(TAG, "Displaying far limit value");
         TextView farLimitView = (TextView) findViewById(R.id.far_limit_value);
         farLimitView.setText(format(result.getFarDistance(), getSelectedUnit()));
 
+        Log.d(TAG, "Displaying hyperfocal distance value");
         TextView hyperFocalView = (TextView) findViewById(R.id.hyperfocal_distance_value);
         hyperFocalView.setText(format(result.getHyperFocalDistance(), getSelectedUnit()));
 
-        TextView inFrontSubjectView  = (TextView) findViewById(R.id.infront_subject_value);
+        Log.d(TAG, "Displaying in front subject  value");
+        TextView inFrontSubjectView = (TextView) findViewById(R.id.infront_subject_value);
         inFrontSubjectView.setText(format(result.getInFrontOfSubject(), getSelectedUnit()));
 
-        TextView inFrontSubjectHyperfocalView  = (TextView) findViewById(R.id.infront_subject_hyperfocal_value);
+        Log.d(TAG, "Displaying in front subject hyperfocal value");
+        TextView inFrontSubjectHyperfocalView = (TextView) findViewById(R.id.infront_subject_hyperfocal_value);
         inFrontSubjectHyperfocalView.setText(format(result.getInFrontOfSubjectForHyperfocal(), getSelectedUnit()));
 
-        TextView behindSubjectView  = (TextView) findViewById(R.id.behind_subject_value);
+        Log.d(TAG, "Displaying behind subject value");
+        TextView behindSubjectView = (TextView) findViewById(R.id.behind_subject_value);
         behindSubjectView.setText(format(result.getBehindSubject(), getSelectedUnit()));
 
+        Log.d(TAG, "Displaying total value");
         TextView totalView = (TextView) findViewById(R.id.total_value);
         totalView.setText(format(result.getTotal(), getSelectedUnit()));
 
+        Log.d(TAG, "Displaying coc value");
         TextView cocView = (TextView) findViewById(R.id.coc_value);
         cocView.setText(format(result.getCoc(), MeasurementUnit.MILLIMETER));
+
+        Log.i(TAG, "Finished displaying calculated result");
     }
 }
