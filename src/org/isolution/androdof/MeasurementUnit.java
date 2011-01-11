@@ -1,14 +1,18 @@
 package org.isolution.androdof;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Enumeration of measurement unit. Implements serializable so that we can serialize in the application bundle
+ * during state transition.
+ *
  * User: agwibowo
  * Date: 9/01/11
  * Time: 6:26 PM
  */
-public enum MeasurementUnit {
+public enum MeasurementUnit implements Serializable{
     MILLIMETER("millimeter","mm"),
     FEET("feet","ft"),
     METER("meter","m");

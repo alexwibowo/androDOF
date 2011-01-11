@@ -1,5 +1,6 @@
 package org.isolution.androdof;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -8,7 +9,7 @@ import java.math.RoundingMode;
  * Date: 3/01/11
  * Time: 1:11 AM
  */
-public class Calculator {
+public class Calculator implements Serializable{
     /** Subject distance, in millimeters */
     private BigDecimal subjectDistance;
 
@@ -113,9 +114,10 @@ public class Calculator {
     }
 
     /**
-     * A class to encapsulate calculation result
+     * A class to encapsulate calculation result. Implements serializable so that we can serialize in the application bundle
+     * during state transition.
      */
-    public static class Result {
+    public static class Result implements Serializable{
         private BigDecimal subjectDistance;
         private BigDecimal hyperFocalDistance;
         private BigDecimal nearDistance;

@@ -1,11 +1,13 @@
 package org.isolution.androdof;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.isolution.androdof.CameraData.Manufacturer.*;
 
 /**
+ *
  * User: agwibowo
  * Date: 4/01/11
  * Time: 1:35 AM
@@ -17,7 +19,11 @@ public class CameraData {
 
     private static final Map<Manufacturer, List<CameraData>> DATABASE  = new HashMap<Manufacturer, List<CameraData>>();
 
-    public static enum Manufacturer {
+    /**
+     * Enumeration of camera manufacturer. Implements serializable so that we can serialize in the application bundle
+     * during state transition.
+     */
+    public static enum Manufacturer implements Serializable{
         AGFA,
         CANON,
         CASIO,
