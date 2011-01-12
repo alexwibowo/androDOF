@@ -34,6 +34,7 @@
     <string name="calculate_button_label">Calculate</string>
 
     <string name="help_label">Help</string>
+    <string name="feedback_label">Feedback</string>
 
     <string name="setting_label">Setting</string>
     <string name="manufacturer_setting_key">manufacturer</string>
@@ -43,7 +44,8 @@
     <string name="about_button_label">About</string>
     <string name="about_text">\
 An application for calculating depth of field (DOF) and hyperfocal distance for camera.
-This is a very early release of the application. Send any feedback, feature requests to : alexwibowo@gmail.com
+Send any feedback, bugs, feature requests to : alexandroiddev@gmail.com.
+Thank you!
     </string>
     <string name="about_shortcut">A</string>
 </resources>

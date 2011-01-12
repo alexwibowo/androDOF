@@ -1348,6 +1348,16 @@ public class CameraData {
         return Collections.unmodifiableList(DATABASE.get(manufacturer));
     }
 
+    public static CameraData getCameraByManufacturerAndModel(Manufacturer manufacturer, String model) {
+        List<CameraData> cameraByManufacturer = getCameraByManufacturer(manufacturer);
+        for (CameraData cameraData : cameraByManufacturer) {
+            if (cameraData.getLabel().equals(model)) {
+                return cameraData;
+            }
+        }
+        throw new UnknownCameraModelException(manufacturer, model);
+    }
+
     public static BigDecimal getCocForCamera(Manufacturer manufacturer, String camera) {
         List<CameraData> camerasForManufacturer = DATABASE.get(manufacturer);
         for (CameraData cameraData : camerasForManufacturer) {

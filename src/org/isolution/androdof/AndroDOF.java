@@ -2,9 +2,13 @@ package org.isolution.androdof;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -120,6 +124,17 @@ public class AndroDOF extends Activity implements View.OnClickListener {
             case R.id.help_button:{
                 Log.d(TAG, "Help button");
                 startActivity(new Intent(this, Help.class));
+                return true;
+            }
+            case R.id.feedback_button: {
+                Log.d(TAG, "Feedback button");
+                String builder = ApplicationHelper.getDeviceDetails(this);
+                Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                emailIntent.setType("plain/text");
+                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"alexandroiddev@gmail.com"});
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AndroDOF");
+                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, builder);
+                startActivity(emailIntent);
                 return true;
             }
             case R.id.about_button: {

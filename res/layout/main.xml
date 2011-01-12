@@ -21,12 +21,12 @@
                 <Spinner android:id="@+id/camera_spinner" android:layout_width="fill_parent" android:prompt="@string/camera_prompt" android:layout_span="2"/>
             </TableRow>
             <TableRow>
-                <TextView android:text="@string/focus_label"/>
-                <EditText android:id="@+id/focus_length_editText" android:inputType="number" android:layout_span="2"/>
-            </TableRow>
-            <TableRow>
                 <TextView android:text="@string/fstop_label"/>
                 <Spinner android:id="@+id/fstop_spinner" android:prompt="@string/fstop_prompt" android:layout_span="2"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="@string/focus_label"/>
+                <EditText android:id="@+id/focus_length_editText" android:inputType="number" android:layout_span="2"/>
             </TableRow>
             <TableRow>
                 <TextView android:text="@string/subject_distance_label"/>

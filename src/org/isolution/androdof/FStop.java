@@ -81,4 +81,13 @@ public class FStop {
     public static List<FStop> getAllFStops() {
         return DATABASE;
     }
+
+    public static FStop getFStop(String value) {
+        for (FStop fStop : DATABASE) {
+            if (fStop.getLabel().equals(value)) {
+                return fStop;
+            }
+        }
+        throw new IllegalArgumentException("Unknown fstop value: " + value);
+    }
 }
