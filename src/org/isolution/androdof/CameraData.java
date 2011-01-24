@@ -81,6 +81,7 @@ public class CameraData {
         canonCameras.add(new CameraData(CANON,"D60",new BigDecimal("0.019")));
         canonCameras.add(new CameraData(CANON,"Digital Rebel / 300D",new BigDecimal("0.019")));
         canonCameras.add(new CameraData(CANON,"Digital Rebel T1i / 500D",new BigDecimal("0.019")));
+        canonCameras.add(new CameraData(CANON,"Digital Rebel T2i / 550D",new BigDecimal("0.019")));
         canonCameras.add(new CameraData(CANON,"Digital Rebel XS / 1000D",new BigDecimal("0.019")));
         canonCameras.add(new CameraData(CANON,"Digital Rebel XT / 350D",new BigDecimal("0.019")));
         canonCameras.add(new CameraData(CANON,"Digital Rebel XTi / 400D",new BigDecimal("0.019")));
